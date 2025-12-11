@@ -90,6 +90,12 @@ class AlmaMerger:
             MergeProcessError: If any step fails during the merge process.
         """
         try:
+            self.copy_internal_blocks(from_user, to_user)
+        except Exception as e:
+            logging.error(f"[merge_users] Error at copy_internal_blocks: {e}")
+            raise MergeProcessError(f"copy_internal_blocks: {e}")
+
+        try:
             add_job = self.wait.until(EC.element_to_be_clickable((
                 By.XPATH, "//a[normalize-space()='Add Job']"
             )))
@@ -217,6 +223,36 @@ class AlmaMerger:
         except Exception as e:
             logging.error(f"[search_user_in_iframe] Error at switch to default content: {e}")
             raise MergeProcessError(f"switch to default content: {e}")
+
+    def copy_internal_blocks(self, from_user: str, to_user: str) -> None:
+        """Copy internal blocks from one user to another.
+
+        Args:
+            from_user (User): The user to copy blocks from.
+            to_user (User): The user to copy blocks to.
+
+        Raises:
+            MergeProcessError: If any step fails during the block copying process.
+        """
+        u_from = User(from_user, self.temp_staff.zone, self.env)
+        _ = u_from.data
+        if u_from.error:
+            logging.error(f"User from {from_user} does not exist.")
+            raise MergeProcessError(f"User from {from_user} does not exist.")
+
+        u_to = User(to_user, self.temp_staff.zone, self.env)
+        _ = u_to.data
+        if u_to.error:
+            logging.error(f"User to {to_user} does not exist.")
+            raise MergeProcessError(f"User to {to_user} does not exist.")
+
+        u_to.data['user_block'] += [block for block in u_from.data['user_block'] if block['segment_type']=='Internal']
+        u_to.update()
+        if u_to.error:
+            logging.error(f"Failed to update user {to_user} after copying blocks: {u_to.error_msg}")
+            raise MergeProcessError(f"Failed to update user {to_user} after copying blocks: {u_to.error_msg}")
+
+
 
 if __name__ == '__main__':
     pass

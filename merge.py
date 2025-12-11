@@ -6,6 +6,7 @@ import sys
 import logging
 
 from almapiwrapper.configlog import config_log
+import time
 
 config_log()
 load_dotenv()
@@ -35,6 +36,9 @@ for zone, data in accounts.items():
             merger.merge_users(from_user, to_user)
         except MergeProcessError as e:
             logging.error(f'Failed to merge {from_user} into {to_user}: {e}')
+            merger.driver.get(temp_staff.alma_url)
+            time.sleep(5)
+            merger.open_merge_users_page()
 
     merger.driver.quit()
     temp_staff.delete()

@@ -1,0 +1,39 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyo
+*.pyd
+
+# Virtual environment
+venv/
+.env
+
+# Logs
+*.log
+log/
+
+# IDE files
+.idea/
+.vscode/
+
+# JSON keys and secrets
+keys.json
+
+# Misc
+*.swp
+*.swo
+
+# Ignore package builds
+dist/
+build/
+*.egg-info/
+
+# Ignore temporary files
+*.tmp
+*.temp
+
+# Ignore compiled C extensions
+*.so
+
+# Ignore wheel files
+*.whl
+

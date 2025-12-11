@@ -1,0 +1,8 @@
+selenium
+python-dotenv
+almapiwrapper
+lxml
+requests
+pandas
+numpy
+openpyxl

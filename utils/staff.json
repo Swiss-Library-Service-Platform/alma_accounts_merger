@@ -1,0 +1,89 @@
+{
+  "gender": {
+    "value": "",
+    "desc": ""
+  },
+  "password": "",
+  "status": {
+    "value": "ACTIVE",
+    "desc": "Active"
+  },
+  "record_type": {
+    "value": "STAFF",
+    "desc": "Staff"
+  },
+  "primary_id": "automation@slsp.ch",
+  "middle_name": "",
+  "last_name": "SLSP Automation",
+  "user_title": {
+    "value": "",
+    "desc": ""
+  },
+  "job_category": {
+    "value": "",
+    "desc": ""
+  },
+  "job_description": "",
+  "user_group": {
+    "value": "99",
+    "desc": " Staff User"
+  },
+  "campus_code": {
+    "desc": ""
+  },
+  "web_site_url": "",
+  "cataloger_level": {
+    "value": "90",
+    "desc": "[90] GND editor  / no update possible"
+  },
+  "preferred_language": {
+    "value": "en",
+    "desc": "English"
+  },
+  "account_type": {
+    "value": "INTERNAL",
+    "desc": "Internal"
+  },
+  "force_password_change": "false",
+  "contact_info": {
+    "address": [],
+    "email": [
+      {
+        "email_address": "automation@slsp.ch",
+        "email_type": [
+          {
+            "value": "work",
+            "desc": "Work"
+          }
+        ],
+        "preferred": true,
+        "segment_type": "Internal"
+      }
+    ],
+    "phone": []
+  },
+  "user_identifier": [],
+  "user_role": [
+    {
+      "status": {
+        "value": "ACTIVE",
+        "desc": "Active"
+      },
+      "scope": {
+        "value": "41SLSP_NETWORK"
+      },
+      "role_type": {
+        "value": "21",
+        "desc": "User Manager"
+      },
+      "parameter": []
+    }
+  ],
+  "user_block": [],
+  "user_note": [],
+  "user_statistic": [],
+  "pref_first_name": "",
+  "pref_middle_name": "",
+  "pref_last_name": "",
+  "pref_name_suffix": ""
+}

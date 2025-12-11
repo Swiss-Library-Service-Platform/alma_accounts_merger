@@ -1,0 +1,140 @@
+{
+  "iz_codes": {
+    "BVERW": "41BIG_INST",
+    "ABN": "41SLSP_ABN",
+    "BCUFR": "41SLSP_BCUFR",
+    "BFH": "41SLSP_BFH",
+    "EPF": "41SLSP_EPF",
+    "ETH": "41SLSP_ETH",
+    "OSTGR": "41SLSP_FHO",
+    "FHNW": "41SLSP_FNW",
+    "HES": "41SLSP_HES",
+    "HPH": "41SLSP_HPH",
+    "HSG": "41SLSP_HSG",
+    "IHEID": "41SLSP_IID",
+    "LIB4RI": "41SLSP_LIB",
+    "NZ": "41SLSP_NETWORK",
+    "ZPH": "41SLSP_PHZ",
+    "BSB": "41SLSP_RBE",
+    "ISR": "41SLSP_RRO",
+    "RZH": "41SLSP_RZH",
+    "RZS": "41SLSP_RZS",
+    "VKSS": "41SLSP_SBK",
+    "SUPSI": "41SLSP_SUP",
+    "TRI": "41SLSP_TRI",
+    "UBE": "41SLSP_UBE",
+    "UBS": "41SLSP_UBS",
+    "UNIGE": "41SLSP_UGE",
+    "UNINE": "41SLSP_UNE",
+    "USI": "41SLSP_USI",
+    "UZB": "41SLSP_UZB",
+    "VGE": "41SLSP_VGE",
+    "ZHAW": "41SLSP_ZAW",
+    "ZBS": "41SLSP_ZBS",
+    "ZHDK": "41SLSP_ZHK"
+  },
+  "alma_urls": {
+    "NZ": {
+      "P": "https://slsp-network.alma.exlibrisgroup.com",
+      "S": "https://slsp-network-psb.alma.exlibrisgroup.com"
+    },
+    "UNIGE": {
+      "P": "https://slsp-unige.alma.exlibrisgroup.com",
+      "S": "https://slsp-unige-psb.alma.exlibrisgroup.com"
+    },
+    "ETH": {
+      "P": "https://slsp-eth.alma.exlibrisgroup.com"
+    },
+    "UBS": {
+      "P": "https://slsp-ubs.alma.exlibrisgroup.com",
+      "S": "https://slsp-ubs-psb.alma.exlibrisgroup.com"
+    },
+    "RZS": {
+      "P": "https://slsp-rzs.alma.exlibrisgroup.com"
+    },
+    "HSG": {
+      "P": "https://slsp-hsg.alma.exlibrisgroup.com"
+    },
+    "USI": {
+      "P": "https://slsp-usi.alma.exlibrisgroup.com"
+    },
+    "UZB": {
+      "P": "https://slsp-uzb.alma.exlibrisgroup.com"
+    },
+    "BCUFR": {
+      "P": "https://slsp-bcufr.alma.exlibrisgroup.com",
+      "S": "https://slsp-bcufr-psb.alma.exlibrisgroup.com"
+    },
+    "ZHAW": {
+      "P": "https://slsp-zhaw.alma.exlibrisgroup.com"
+    },
+    "UBE": {
+      "P": "https://slsp-ube.alma.exlibrisgroup.com"
+    },
+    "ZHDK": {
+      "P": "https://slsp-zhdk.alma.exlibrisgroup.com"
+    },
+    "BFH": {
+      "P": "https://slsp-bfh.alma.exlibrisgroup.com"
+    },
+    "HESSO": {
+      "P": "https://slsp-hesso.alma.exlibrisgroup.com"
+    },
+    "OSTGR": {
+      "P": "https://slsp-ostgr.alma.exlibrisgroup.com"
+    },
+    "EPFL": {
+      "P": "https://slsp-epfl.alma.exlibrisgroup.com"
+    },
+    "UNINE": {
+      "P": "https://slsp-unine.alma.exlibrisgroup.com"
+    },
+    "FHNW": {
+      "P": "https://slsp-fhnw.alma.exlibrisgroup.com"
+    },
+    "SUPSI": {
+      "P": "https://slsp-supsi.alma.exlibrisgroup.com"
+    },
+    "HPH": {
+      "P": "https://slsp-hph.alma.exlibrisgroup.com",
+      "S": "https://slsp-hph-psb.alma.exlibrisgroup.com"
+    },
+    "ZPH": {
+      "P": "https://slsp-zph.alma.exlibrisgroup.com"
+    },
+    "LIB4RI": {
+      "P": "https://slsp-lib4ri.alma.exlibrisgroup.com"
+    },
+    "IHEID": {
+      "P": "https://slsp-iheid.alma.exlibrisgroup.com"
+    },
+    "VGE": {
+      "P": "https://slsp-vge.alma.exlibrisgroup.com"
+    },
+    "ISR": {
+      "P": "https://slsp-isr.alma.exlibrisgroup.com",
+      "S": "https://slsp-isr-psb.alma.exlibrisgroup.com"
+    },
+    "RZH": {
+      "P": "https://slsp-rzh.alma.exlibrisgroup.com"
+    },
+    "BSB": {
+      "P": "https://slsp-bsb.alma.exlibrisgroup.com"
+    },
+    "ZBS": {
+      "P": "https://slsp-zbs.alma.exlibrisgroup.com"
+    },
+    "VKSS": {
+      "P": "https://slsp-vkss.alma.exlibrisgroup.com"
+    },
+    "TRI": {
+      "P": "https://slsp-tri.alma.exlibrisgroup.com"
+    },
+    "BVERW": {
+      "P": "https://bverw.alma.exlibrisgroup.com"
+    },
+    "ABN": {
+      "P": "https://slsp-abn.alma.exlibrisgroup.com"
+    }
+  }
+}

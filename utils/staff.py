@@ -1,17 +1,13 @@
 import os
 
 from almapiwrapper.users import User, NewUser
-from almapiwrapper.configlog import config_log
 from almapiwrapper.record import JsonData
 import string
 import secrets
 
 from importlib.resources import files
-from dotenv import load_dotenv
 from copy import deepcopy
 
-
-load_dotenv()
 
 class TempStaffUser:
 

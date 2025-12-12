@@ -5,16 +5,12 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 
-from dotenv import load_dotenv
 import os
 import time
 from selenium.common.exceptions import StaleElementReferenceException, NoSuchElementException, TimeoutException, ElementNotInteractableException, ElementClickInterceptedException
 from almapiwrapper.users import User
 
 from utils.staff import TempStaffUser
-
-
-load_dotenv()
 
 import logging
 
@@ -272,21 +268,3 @@ class AlmaMerger:
 if __name__ == '__main__':
     pass
 
-
-
-    # def iterate_users_to_merge(self, users: list[Tuple[str, str]],
-    #                            zone: str, driver:, wait:) -> None:
-    #     """Iterate over a list of user pairs to merge them in Alma.
-    #
-    #     Args:
-    #         users (list[Tuple[str, str]]): A list of tuples containing pairs of user primary IDs to merge.
-    #         zone (str): The zone in which to operate.
-    #
-    #     Returns:
-    #         None
-    #     """
-    #
-    #     for from_user, to_user in users:
-    #         merge_users(from_user, to_user, zone, driver, wait)
-    #         time.sleep(2)
-# except (StaleElementReferenceException, NoSuchElementException):

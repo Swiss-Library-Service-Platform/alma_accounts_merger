@@ -162,6 +162,11 @@ class AlmaMerger:
         except Exception as e:
             logging.error(f"[merge_users] Error at start button: {e}")
             raise MergeProcessError(f"start button: {e}")
+        try:
+            self.log_merge_job_id()
+        except Exception as e:
+            logging.error(f"[merge_users] Error at log_merge_job_id: {e}")
+            raise MergeProcessError(f"log_merge_job_id: {e}")
 
     def search_user_in_iframe(self, primary_id: str):
         """Search for a user by primary ID within an iframe and select the first result.
@@ -252,7 +257,17 @@ class AlmaMerger:
             logging.error(f"Failed to update user {to_user} after copying blocks: {u_to.error_msg}")
             raise MergeProcessError(f"Failed to update user {to_user} after copying blocks: {u_to.error_msg}")
 
-
+    def log_merge_job_id(self):
+        """Log the merge job ID after initiating a merge.
+        """
+        try:
+            jobid_cell = self.wait.until(EC.visibility_of_element_located(
+                (By.XPATH, "//tr[@id='recordContainerjobList1']/td[2]")
+                 ))
+            logging.info(f"Merge job initiated with ID: {jobid_cell.text}")
+        except Exception as e:
+            logging.error(f"Failed to retrieve merge job ID: {e}")
+            raise MergeProcessError(f"Failed to retrieve merge job ID: {e}")
 
 if __name__ == '__main__':
     pass

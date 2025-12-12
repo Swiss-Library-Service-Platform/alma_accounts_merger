@@ -1,10 +1,15 @@
 import unittest
+from typing import FrozenSet
+
 from utils.mergeprocess import AlmaMerger, MergeProcessError
 from utils.staff import TempStaffUser
 
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from almapiwrapper.users import User, NewUser
+from almapiwrapper.configlog import config_log
+
+config_log()
 
 class TestMergeProcess(unittest.TestCase):
     @classmethod
@@ -13,6 +18,7 @@ class TestMergeProcess(unittest.TestCase):
         cls.from_user = '0000767261781304d@test.eduid.ch'
         cls.to_user = '0000767261781304@test.eduid.ch'
         cls.zone = 'UBS'
+        User(cls.primary_id, cls.zone, 'S').delete()
         cls.temp_staff = TempStaffUser(cls.primary_id, cls.zone).create_staff_account()
         u1 = User(cls.to_user, cls.zone, 'S')
         u1.data['user_note'] = []
@@ -27,7 +33,7 @@ class TestMergeProcess(unittest.TestCase):
         User(cls.from_user, cls.zone, 'S').delete()
 
     def test_workflow(self):
-        merger = AlmaMerger(self.temp_staff, headless=True)
+        merger = AlmaMerger(self.temp_staff, headless=False)
         merger.login()
         merger.open_merge_users_page()
         try:

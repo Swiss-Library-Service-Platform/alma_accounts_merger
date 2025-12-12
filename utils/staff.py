@@ -25,6 +25,7 @@ class TempStaffUser:
         self.zone = zone
         self.env = os.getenv('ALMA_ENV', 'prod')
         self.alma_url = self.get_alma_url(zone)
+        self.temp_user = None
 
     @staticmethod
     def generate_password(length: int = 12) -> str:
@@ -79,10 +80,11 @@ class TempStaffUser:
         """
         # Open the staff.json resource file using importlib.resources
         staff_template = self.get_template(self.primary_id, self.zone)
-        NewUser(data=staff_template,
+        self.temp_user = NewUser(data=staff_template,
                     zone=self.zone,
                     env=os.getenv('ALMA_ENV', 'prod')
         ).create(password=self.password)
+
         return self
 
     def delete(self):

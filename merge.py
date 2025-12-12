@@ -23,9 +23,18 @@ for zone, data in accounts.items():
     logging.info(f'Processing {zone} ({zone_nb} / {nb_zones}): {len(data)} merges to perform.')
     temp_staff = TempStaffUser(f'automation_{zone.lower()}@slsp.ch', zone).create_staff_account()
 
-    merger = AlmaMerger(temp_staff, headless=True)
-    merger.login()
-    merger.open_merge_users_page()
+    if temp_staff.temp_user.error is True:
+        logging.error(f'Failed to create temp staff account for {zone}')
+        continue
+
+    try:
+        merger = AlmaMerger(temp_staff, headless=True)
+        merger.login()
+        merger.open_merge_users_page()
+    except Exception as e:
+        logging.error(f'Failed to initialize AlmaMerger for zone {zone}: {e}')
+        temp_staff.delete()
+        continue
 
     for i, row in data.iterrows():
         from_user = row['from_user']

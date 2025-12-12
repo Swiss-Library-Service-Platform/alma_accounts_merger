@@ -8,7 +8,7 @@ import logging
 from almapiwrapper.configlog import config_log
 import time
 
-config_log()
+config_log('merge_users')
 load_dotenv()
 
 file_path = sys.argv[1]
@@ -46,7 +46,7 @@ for zone, data in accounts.items():
         except MergeProcessError as e:
             logging.error(f'Failed to merge {from_user} into {to_user}: {e}')
             merger.driver.get(temp_staff.alma_url)
-            time.sleep(5)
+            time.sleep(10)
             merger.open_merge_users_page()
 
     merger.driver.quit()

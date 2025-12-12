@@ -21,7 +21,7 @@ nb_zones = len(accounts)
 zone_nb = 0
 for zone, data in accounts.items():
     zone_nb += 1
-    logging.info(f'Processing {zone} ({zone_nb} / {nb_zones}): {len(data)} merges to perform.')
+    logging.info(f'Processing {zone} ({zone_nb} / {nb_zones} zones): {len(data)} merges to perform.')
     temp_staff = TempStaffUser(f'automation_{zone.lower()}@slsp.ch', zone).create_staff_account()
 
     if temp_staff.temp_user.error is True:
@@ -37,17 +37,19 @@ for zone, data in accounts.items():
         temp_staff.delete()
         continue
 
-    for i, row in data.iterrows():
+    account_nb = 0
+    for i, row in data.reset_index().iterrows():
         from_user = row['from_user']
         to_user = row['to_user']
-        logging.info(f'Processing {row["zone"]} ({i+1}/{len(data)}): from {from_user} to {to_user}')
+        account_nb += 1
+        logging.info(f'Processing {row["zone"]} ({account_nb}/{len(data)} - row {i}): from {from_user} to {to_user}')
 
         try:
             merger.merge_users(from_user, to_user)
         except MergeProcessError as e:
             logging.error(f'Failed to merge {from_user} into {to_user}: {e}')
             merger.driver.get(temp_staff.alma_url)
-            time.sleep(10)
+            time.sleep(30)
             merger.open_merge_users_page()
 
     merger.driver.quit()

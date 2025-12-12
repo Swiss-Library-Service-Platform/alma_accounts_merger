@@ -14,6 +14,8 @@ logging.getLogger().setLevel(logging.INFO)
 
 file_path = sys.argv[1]
 df = pd.read_excel(file_path, dtype=str)
+if 'Merged' not in df.columns:
+    df['Merged'] = 'FALSE'
 accounts = {zone: data for zone, data in df.groupby('zone')}
 logging.info(f'Starting user merge process: {len(df)} accounts to process.')
 
@@ -38,7 +40,10 @@ for zone, data in accounts.items():
         continue
 
     account_nb = 0
-    for i, row in data.reset_index().iterrows():
+    for i, row in data.iterrows():
+        if df.at[i, 'Merged'] == 'TRUE':
+            logging.info(f'Skipping already merged row {i} for {row["zone"]}: from {row["from_user"]} to {row["to_user"]}')
+            continue
         from_user = row['from_user']
         to_user = row['to_user']
         account_nb += 1
@@ -46,9 +51,11 @@ for zone, data in accounts.items():
 
         try:
             merger.merge_users(from_user, to_user)
+            df.at[i, 'Merged'] = 'TRUE'
+            df.to_excel(file_path, index=False)
         except MergeProcessError as e:
             logging.error(f'Failed to merge {from_user} into {to_user}: {e}')
-            merger.driver.get(temp_staff.alma_url)
+            merger.driver.get(temp_staff.alma_url + '/ng')
             time.sleep(30)
             merger.open_merge_users_page()
 

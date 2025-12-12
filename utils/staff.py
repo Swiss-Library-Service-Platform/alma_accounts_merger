@@ -81,6 +81,17 @@ class TempStaffUser:
                     env=self.env
         ).create(password=self.password)
 
+        # in case of error, try to delete existing user and recreate
+        if self.temp_user.error is True:
+            u = User(self.primary_id, self.zone, self.env)
+            _ = u.data
+            if u.error is False:
+                u.delete()
+                self.temp_user = NewUser(data=staff_template,
+                                         zone=self.zone,
+                                         env=self.env
+                                         ).create(password=self.password)
+
         return self
 
     def delete(self):

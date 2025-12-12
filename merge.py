@@ -51,8 +51,3 @@ for zone, data in accounts.items():
 
     merger.driver.quit()
     temp_staff.delete()
-
-config_log()
-staff_user = TempStaffUser('automation@slsp.ch', 'ISR').create_staff_account()
-
-

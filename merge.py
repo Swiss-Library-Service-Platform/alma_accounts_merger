@@ -8,13 +8,15 @@ import logging
 from almapiwrapper.configlog import config_log
 import time
 
-def workflow(file_path: str = None):
+def workflow(file_path: str):
+    """Main workflow to merge users based on an Excel file input.
+
+    args:
+        file_path (str): Path to the Excel file containing merge instructions.
+    """
     load_dotenv()
     config_log('merge_users')
     logging.getLogger().setLevel(logging.INFO)
-
-    if file_path is None:
-        file_path = sys.argv[1]
 
     df = pd.read_excel(file_path, dtype=str)
     if 'Merged' not in df.columns:
@@ -69,4 +71,5 @@ def workflow(file_path: str = None):
         temp_staff.delete()
 
 if __name__ == '__main__':
-    logging.info(f'Starting user merge process: {len(df)} accounts to process.')
+    file_path = sys.argv[1]
+    workflow(file_path)

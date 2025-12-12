@@ -14,9 +14,24 @@ def workflow(file_path: str):
     args:
         file_path (str): Path to the Excel file containing merge instructions.
     """
+    import os
     load_dotenv()
-    config_log('merge_users')
-    logging.getLogger().setLevel(logging.INFO)
+    # Définir le nom du fichier de log en fonction du fichier d'entrée
+    file_name = os.path.splitext(os.path.basename(file_path))[0]
+    # Configuration avancée du logger directement sur l'instance
+    logger = logging.getLogger()
+    logger.setLevel(logging.INFO)
+    message_format = "%(asctime)s - %(levelname)s - %(message)s"
+    log_file_name = f'log/log{"" if len(file_name) == 0 else "_"}{file_name}.txt'
+    file_handler = logging.FileHandler(log_file_name)
+    file_handler.setFormatter(logging.Formatter(message_format))
+    stream_handler = logging.StreamHandler(sys.stdout)
+    stream_handler.setFormatter(logging.Formatter(message_format))
+    # Nettoyage des handlers existants pour éviter les doublons
+    if logger.hasHandlers():
+        logger.handlers.clear()
+    logger.addHandler(file_handler)
+    logger.addHandler(stream_handler)
 
     df = pd.read_excel(file_path, dtype=str)
     if 'Merged' not in df.columns:

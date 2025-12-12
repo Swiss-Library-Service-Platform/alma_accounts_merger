@@ -8,8 +8,10 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from almapiwrapper.users import User, NewUser
 from almapiwrapper.configlog import config_log
+import logging
 
 config_log()
+logging.getLogger().setLevel(logging.INFO)
 
 class TestMergeProcess(unittest.TestCase):
     @classmethod

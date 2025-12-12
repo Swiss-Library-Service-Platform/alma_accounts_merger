@@ -9,6 +9,7 @@ from almapiwrapper.configlog import config_log
 import time
 
 config_log('merge_users')
+logging.getLogger().setLevel(logging.INFO)
 load_dotenv()
 
 file_path = sys.argv[1]

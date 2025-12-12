@@ -155,6 +155,7 @@ class AlmaMerger:
         try:
             start_btn = self.wait.until(EC.element_to_be_clickable((By.ID, 'PAGE_BUTTONS_cbuttonconfirmationconfirm')))
             start_btn.click()
+            time.sleep(2)
         except Exception as e:
             logging.error(f"[merge_users] Error at start button: {e}")
             raise MergeProcessError(f"start button: {e}")

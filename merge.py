@@ -41,12 +41,15 @@ for zone, data in accounts.items():
 
     account_nb = 0
     for i, row in data.iterrows():
-        if df.at[i, 'Merged'] == 'TRUE':
-            logging.info(f'Skipping already merged row {i} for {row["zone"]}: from {row["from_user"]} to {row["to_user"]}')
-            continue
         from_user = row['from_user']
         to_user = row['to_user']
         account_nb += 1
+
+        # Skip already merged rows
+        if df.at[i, 'Merged'] == 'TRUE':
+            logging.info(f'Skipping already merged row {i} for {row["zone"]}: from {row["from_user"]} to {row["to_user"]}')
+            continue
+
         logging.info(f'Processing {row["zone"]} ({account_nb}/{len(data)} - row {i}): from {from_user} to {to_user}')
 
         try:

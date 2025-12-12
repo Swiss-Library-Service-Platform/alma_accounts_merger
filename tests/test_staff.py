@@ -1,12 +1,14 @@
 from almapiwrapper.users import User
 from almapiwrapper.configlog import config_log
 import unittest
-from unittest.mock import patch, MagicMock
 import string
 from utils.staff import TempStaffUser
+from dotenv import load_dotenv
 
 import logging
 
+
+load_dotenv()
 config_log()
 logging.getLogger().setLevel(logging.INFO)
 

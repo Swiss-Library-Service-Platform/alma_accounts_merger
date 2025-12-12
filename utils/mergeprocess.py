@@ -29,7 +29,7 @@ class AlmaMerger:
             headless (bool): Whether to run the browser in headless mode. Default is True.
         """
         self.temp_staff = temp_staff
-        self.env = os.getenv('ALMA_ENV', 'prod')
+        self.env = os.getenv('ALMA_ENV', 'P')
         options = Options()
         if headless:
             options.add_argument("--headless")

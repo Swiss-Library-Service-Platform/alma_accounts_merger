@@ -8,9 +8,9 @@ import logging
 from almapiwrapper.configlog import config_log
 import time
 
+load_dotenv()
 config_log('merge_users')
 logging.getLogger().setLevel(logging.INFO)
-load_dotenv()
 
 file_path = sys.argv[1]
 df = pd.read_excel(file_path, dtype=str)

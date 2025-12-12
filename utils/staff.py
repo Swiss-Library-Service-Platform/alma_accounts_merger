@@ -19,7 +19,7 @@ class TempStaffUser:
         self.primary_id = primary_id
         self.password = self.generate_password()
         self.zone = zone
-        self.env = os.getenv('ALMA_ENV', 'prod')
+        self.env = os.getenv('ALMA_ENV', 'P')
         self.alma_url = self.get_alma_url(zone)
         self.temp_user = None
 
@@ -63,7 +63,7 @@ class TempStaffUser:
         Returns:
             str: The Alma URL for the specified zone.
         """
-        return self.iz_info['alma_urls'][zone][os.getenv('ALMA_ENV', 'prod')]
+        return self.iz_info['alma_urls'][zone][self.env]
 
     def create_staff_account(self) -> User:
         """Create a staff account in the specified zone using a template JSON file.
@@ -78,14 +78,14 @@ class TempStaffUser:
         staff_template = self.get_template(self.primary_id, self.zone)
         self.temp_user = NewUser(data=staff_template,
                     zone=self.zone,
-                    env=os.getenv('ALMA_ENV', 'prod')
+                    env=self.env
         ).create(password=self.password)
 
         return self
 
     def delete(self):
         """Delete the staff account."""
-        User(self.primary_id, self.zone, os.getenv('ALMA_ENV', 'prod')).delete()
+        User(self.primary_id, self.zone, self.env).delete()
 
 
 if __name__ == '__main__':

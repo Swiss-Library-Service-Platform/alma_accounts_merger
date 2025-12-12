@@ -3,15 +3,17 @@ from typing import FrozenSet
 
 from utils.mergeprocess import AlmaMerger, MergeProcessError
 from utils.staff import TempStaffUser
-
+from dotenv import load_dotenv
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from almapiwrapper.users import User, NewUser
 from almapiwrapper.configlog import config_log
 import logging
 
+load_dotenv()
 config_log()
 logging.getLogger().setLevel(logging.INFO)
+
 
 class TestMergeProcess(unittest.TestCase):
     @classmethod

@@ -63,9 +63,14 @@ def workflow(file_path: str):
                 df.to_excel(file_path, index=False)
             except MergeProcessError as e:
                 logging.error(f'Failed to merge {from_user} into {to_user}: {e}')
-                merger.driver.get(temp_staff.alma_url + '/ng')
-                time.sleep(20)
-                merger.open_merge_users_page()
+                merger.driver.quit()
+                try:
+                    merger = AlmaMerger(temp_staff, headless=True)
+                    merger.login()
+                    merger.open_merge_users_page()
+                except Exception as e:
+                    logging.critical(f'Failed to re-initialize AlmaMerger after error for zone {zone}: {e}')
+                    break
 
         merger.driver.quit()
         temp_staff.delete()

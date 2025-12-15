@@ -11,7 +11,8 @@ class TestMergeWorkflow(unittest.TestCase):
         logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s')
         cls.data_file = os.path.join('data', 'test_merge.xlsx')
         df = pd.read_excel(cls.data_file, dtype=str)
-        df['Merged'] = 'FALSE'
+        # Met à jour la colonne Merge status pour le nouveau workflow
+        df['Merge_status'] = 'NOT PROCESSED'
         df.to_excel(cls.data_file, index=False)
         u1 = User('0000767261781304@test.eduid.ch', 'UBS', 'S')
         u1.data['user_note'] = []
@@ -26,13 +27,8 @@ class TestMergeWorkflow(unittest.TestCase):
         except Exception as e:
             logging.error(f"[test_merge_workflow] Exception: {e}")
             self.fail(f"Exception raised during workflow: {e}")
-        # Optionnel : vérifier ici des effets attendus (logs, fusion, etc.)
-        logging.info(f"[test_merge_workflow] Workflow terminé sans exception.")
 
         df = pd.read_excel(self.data_file, dtype=str)
-        merged_rows = df[df['Merged'] == 'TRUE']
+        merged_rows = df[df['Merge_status'] == 'SUCCESS']
         self.assertGreater(len(merged_rows), 0)
 
-
-if __name__ == '__main__':
-    unittest.main()

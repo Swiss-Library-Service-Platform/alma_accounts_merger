@@ -1,5 +1,5 @@
 from dotenv import load_dotenv
-from utils.mergeprocess import AlmaMerger, MergeProcessError
+from utils.mergeprocess import AlmaMerger, MergeProcessError, UserNotFoundError
 from utils.staff import TempStaffUser
 import pandas as pd
 import sys
@@ -16,9 +16,9 @@ def workflow(file_path: str):
     """
     import os
     load_dotenv()
-    # Définir le nom du fichier de log en fonction du fichier d'entrée
+
     file_name = os.path.splitext(os.path.basename(file_path))[0]
-    # Configuration avancée du logger directement sur l'instance
+
     logger = logging.getLogger()
     logger.setLevel(logging.INFO)
     message_format = "%(asctime)s - %(levelname)s - %(message)s"
@@ -27,15 +27,15 @@ def workflow(file_path: str):
     file_handler.setFormatter(logging.Formatter(message_format))
     stream_handler = logging.StreamHandler(sys.stdout)
     stream_handler.setFormatter(logging.Formatter(message_format))
-    # Nettoyage des handlers existants pour éviter les doublons
+
     if logger.hasHandlers():
         logger.handlers.clear()
     logger.addHandler(file_handler)
     logger.addHandler(stream_handler)
 
     df = pd.read_excel(file_path, dtype=str)
-    if 'Merged' not in df.columns:
-        df['Merged'] = 'FALSE'
+    if 'Merge_status' not in df.columns:
+        df['Merge_status'] = 'NOT PROCESSED'
     accounts = {zone: data for zone, data in df.groupby('zone')}
     logging.info(f'Starting user merge process: {len(df)} accounts to process.')
 
@@ -54,8 +54,8 @@ def workflow(file_path: str):
             merger = AlmaMerger(temp_staff, headless=True)
             merger.login()
             merger.open_merge_users_page()
-        except Exception as e:
-            logging.error(f'Failed to initialize AlmaMerger for zone {zone}: {e}')
+        except MergeProcessError:
+            logging.error(f'Failed to initialize AlmaMerger for zone {zone}: users of the zone will not be merged')
             temp_staff.delete()
             continue
 
@@ -66,7 +66,7 @@ def workflow(file_path: str):
             account_nb += 1
 
             # Skip already merged rows
-            if df.at[i, 'Merged'] == 'TRUE':
+            if df.at[i, 'Merge_status'] == 'SUCCESS':
                 logging.info(f'Skipping already merged row {i} for {row["zone"]}: from {row["from_user"]} to {row["to_user"]}')
                 continue
 
@@ -74,17 +74,26 @@ def workflow(file_path: str):
 
             try:
                 merger.merge_users(from_user, to_user)
-                df.at[i, 'Merged'] = 'TRUE'
+                df.at[i, 'Merge_status'] = 'SUCCESS'
                 df.to_excel(file_path, index=False)
-            except MergeProcessError as e:
-                logging.error(f'Failed to merge {from_user} into {to_user}: {e}')
+            except UserNotFoundError:
+                logging.warning(f'Merge skipped due to user not found: merge {from_user} into {to_user}')
+                df.at[i, 'Merge_status'] = 'FAIL'
+                df.to_excel(file_path, index=False)
+                continue
+            except MergeProcessError:
+                logging.error(f'Failed to merge {from_user} into {to_user}')
+                df.at[i, 'Merge_status'] = 'FAIL'
+                df.to_excel(file_path, index=False)
                 merger.driver.quit()
                 try:
                     merger = AlmaMerger(temp_staff, headless=True)
                     merger.login()
                     merger.open_merge_users_page()
-                except Exception as e:
-                    logging.critical(f'Failed to re-initialize AlmaMerger after error for zone {zone}: {e}')
+                    logging.error(f'Merge skipped due to error: merge {from_user} into {to_user}')
+                    continue
+                except MergeProcessError:
+                    logging.critical(f'Failed to re-initialize AlmaMerger after error for zone {zone}')
                     break
 
         merger.driver.quit()

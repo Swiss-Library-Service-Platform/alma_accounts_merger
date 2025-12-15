@@ -18,6 +18,10 @@ class MergeProcessError(Exception):
     """Custom exception for merge process errors."""
     pass
 
+class UserNotFoundError(Exception):
+    """Custom exception for user not found errors."""
+    pass
+
 class AlmaMerger:
     """Class to handle merging users in Alma using Selenium WebDriver."""
     def __init__(self, temp_staff: TempStaffUser, headless: bool = True):
@@ -85,11 +89,8 @@ class AlmaMerger:
         Raises:
             MergeProcessError: If any step fails during the merge process.
         """
-        try:
-            self.copy_internal_blocks(from_user, to_user)
-        except Exception as e:
-            logging.error(f"[merge_users] Error at copy_internal_blocks: {e}")
-            raise MergeProcessError(f"copy_internal_blocks: {e}")
+
+        self.copy_internal_blocks(from_user, to_user)
 
         try:
             add_job = self.wait.until(EC.element_to_be_clickable((
@@ -97,32 +98,32 @@ class AlmaMerger:
             )))
             add_job.click()
         except Exception as e:
-            logging.error(f"[merge_users] Error at Add Job button: {e}")
-            raise MergeProcessError(f"Add Job button: {e}")
+            logging.error(f"[merge_users] Error at Add Job button: {type(e).__name__}")
+            raise MergeProcessError(f"Add Job button: {type(e).__name__}")
         try:
             pickup_btn = self.wait.until(
                 EC.element_to_be_clickable((By.ID,"PICKUP_ID_pageBeandisplayNameOfFromUserOrUserIdendifier"))
             )
             pickup_btn.click()
         except Exception as e:
-            logging.error(f"[merge_users] Error at Pickup 'from user' button: {e}")
-            raise MergeProcessError(f"Pickup 'from user' button: {e}")
+            logging.error(f"[merge_users] Error at Pickup 'from user' button: {type(e).__name__}")
+            raise MergeProcessError(f"Pickup 'from user' button: {type(e).__name__}")
         try:
             self.search_user_in_iframe(from_user)
         except Exception as e:
-            logging.error(f"[merge_users] Error at search_user_in_iframe (from_user): {e}")
-            raise MergeProcessError(f"search_user_in_iframe (from_user): {e}")
+            logging.error(f"[merge_users] Error at search_user_in_iframe (from_user): {type(e).__name__}")
+            raise MergeProcessError(f"search_user_in_iframe (from_user): {type(e).__name__}")
         try:
             pickup_btn = self.wait.until(EC.element_to_be_clickable((By.ID, "PICKUP_ID_pageBeandisplayNameOfToUserOrUserIdendifier")))
             pickup_btn.click()
         except Exception as e:
-            logging.error(f"[merge_users] Error at Pickup 'to user' button: {e}")
-            raise MergeProcessError(f"Pickup 'to user' button: {e}")
+            logging.error(f"[merge_users] Error at Pickup 'to user' button: {type(e).__name__}")
+            raise MergeProcessError(f"Pickup 'to user' button: {type(e).__name__}")
         try:
             self.search_user_in_iframe(to_user)
         except Exception as e:
-            logging.error(f"[merge_users] Error at search_user_in_iframe (to_user): {e}")
-            raise MergeProcessError(f"search_user_in_iframe (to_user): {e}")
+            logging.error(f"[merge_users] Error at search_user_in_iframe (to_user): {type(e).__name__}")
+            raise MergeProcessError(f"search_user_in_iframe (to_user): {type(e).__name__}")
         try:
             time.sleep(2)
             for param in [
@@ -139,31 +140,31 @@ class AlmaMerger:
                             checkbox_label.click()
                         break
                     except (StaleElementReferenceException, NoSuchElementException, TimeoutException, ElementNotInteractableException, ElementClickInterceptedException) as e:
-                        logging.error(f"[merge_users] Error at checkbox {param}: {e}")
+                        logging.error(f"[merge_users] Error at checkbox {param}: {type(e).__name__}")
                         if attempt == 2:
-                            raise MergeProcessError(f"Checkbox {param}: {e}")
+                            raise MergeProcessError(f"Checkbox {param}: {type(e).__name__}")
                         time.sleep(0.5)
         except Exception as e:
-            logging.error(f"[merge_users] Error at merge options: {e}")
-            raise MergeProcessError(f"merge options: {e}")
+            logging.error(f"[merge_users] Error at merge options: {type(e).__name__}")
+            raise MergeProcessError(f"merge options: {type(e).__name__}")
         try:
             merge_btn = self.wait.until(EC.element_to_be_clickable((By.ID, 'PAGE_BUTTONS_cbuttonmerge')))
             merge_btn.click()
         except Exception as e:
-            logging.error(f"[merge_users] Error at merge button: {e}")
-            raise MergeProcessError(f"merge button: {e}")
+            logging.error(f"[merge_users] Error at merge button: {type(e).__name__}")
+            raise MergeProcessError(f"merge button: {type(e).__name__}")
         try:
             start_btn = self.wait.until(EC.element_to_be_clickable((By.ID, 'PAGE_BUTTONS_cbuttonconfirmationconfirm')))
             start_btn.click()
             time.sleep(2)
         except Exception as e:
-            logging.error(f"[merge_users] Error at start button: {e}")
-            raise MergeProcessError(f"start button: {e}")
+            logging.error(f"[merge_users] Error at start button: {type(e).__name__}")
+            raise MergeProcessError(f"start button: {type(e).__name__}")
         try:
             self.log_merge_job_id()
         except Exception as e:
-            logging.error(f"[merge_users] Error at log_merge_job_id: {e}")
-            raise MergeProcessError(f"log_merge_job_id: {e}")
+            logging.error(f"[merge_users] Error at log_merge_job_id: {type(e).__name__}")
+            raise MergeProcessError(f"log_merge_job_id: {type(e).__name__}")
 
     def search_user_in_iframe(self, primary_id: str):
         """Search for a user by primary ID within an iframe and select the first result.
@@ -178,39 +179,39 @@ class AlmaMerger:
             self.driver.switch_to.frame(iframe)
             time.sleep(2)
         except Exception as e:
-            logging.error(f"[search_user_in_iframe] Error at switching to iframe: {e}")
-            raise MergeProcessError(f"switching to iframe: {e}")
+            logging.error(f"[search_user_in_iframe] Error at switching to iframe: {type(e).__name__}")
+            raise MergeProcessError(f"switching to iframe: {type(e).__name__}")
         try:
             search_type = self.wait.until(EC.element_to_be_clickable((By.ID, "simpleSearchIndexButton")))
             search_type.click()
             time.sleep(1)
         except Exception as e:
-            logging.error(f"[search_user_in_iframe] Error at search type button: {e}")
-            raise MergeProcessError(f"search type button: {e}")
+            logging.error(f"[search_user_in_iframe] Error at search type button: {type(e).__name__}")
+            raise MergeProcessError(f"search type button: {type(e).__name__}")
         try:
             primary_id_option = self.wait.until(EC.element_to_be_clickable((By.ID, "TOP_NAV_Search_index_HFrUser.user_name")))
             primary_id_option.click()
         except Exception as e:
-            logging.error(f"[search_user_in_iframe] Error at primary id option: {e}")
-            raise MergeProcessError(f"primary id option: {e}")
+            logging.error(f"[search_user_in_iframe] Error at primary id option: {type(e).__name__}")
+            raise MergeProcessError(f"primary id option: {type(e).__name__}")
         try:
             search_user = self.wait.until(EC.element_to_be_clickable((By.ID, "ALMA_MENU_TOP_NAV_Search_Text")))
             search_user.clear()
             search_user.send_keys(primary_id)
         except Exception as e:
-            logging.error(f"[search_user_in_iframe] Error at search field: {e}")
-            raise MergeProcessError(f"search field: {e}")
+            logging.error(f"[search_user_in_iframe] Error at search field: {type(e).__name__}")
+            raise MergeProcessError(f"search field: {type(e).__name__}")
         try:
             search_button = self.wait.until(EC.element_to_be_clickable((By.ID, "simpleSearchBtn")))
             search_button.click()
         except Exception as e:
-            logging.error(f"[search_user_in_iframe] Error at search button: {e}")
-            raise MergeProcessError(f"search button: {e}")
+            logging.error(f"[search_user_in_iframe] Error at search button: {type(e).__name__}")
+            raise MergeProcessError(f"search button: {type(e).__name__}")
         try:
             user_table = self.wait.until(EC.presence_of_element_located((By.ID, "TABLE_DATA_userList")))
         except Exception as e:
-            logging.error(f"[search_user_in_iframe] Error at user table: {e}")
-            raise MergeProcessError(f"user table: {e}")
+            logging.error(f"[search_user_in_iframe] Error at user table: {type(e).__name__}")
+            raise MergeProcessError(f"user table: {type(e).__name__}")
         try:
             first_row = self.wait.until(lambda d: (
                     (rows := user_table.find_elements(By.CSS_SELECTOR, "tbody tr")) and
@@ -218,13 +219,13 @@ class AlmaMerger:
             ))
             first_row.click()
         except Exception as e:
-            logging.warning(f"No user found: {e}")
-            raise MergeProcessError(f"fNo user found: {e}")
+            logging.warning(f"No user found: {type(e).__name__}")
+            raise MergeProcessError(f"No user found: {type(e).__name__}")
         try:
             self.driver.switch_to.default_content()
         except Exception as e:
-            logging.error(f"[search_user_in_iframe] Error at switch to default content: {e}")
-            raise MergeProcessError(f"switch to default content: {e}")
+            logging.error(f"[search_user_in_iframe] Error at switch to default content: {type(e).__name__}")
+            raise MergeProcessError(f"switch to default content: {type(e).__name__}")
 
     def copy_internal_blocks(self, from_user: str, to_user: str) -> None:
         """Copy internal blocks from one user to another.
@@ -239,20 +240,22 @@ class AlmaMerger:
         u_from = User(from_user, self.temp_staff.zone, self.env)
         _ = u_from.data
         if u_from.error:
-            logging.error(f"User from {from_user} does not exist.")
-            raise MergeProcessError(f"User from {from_user} does not exist.")
+            msg = f"User from {from_user} does not exist. ({type(u_from.error).__name__})"
+            logging.warning(msg)
+            raise UserNotFoundError(msg)
 
         u_to = User(to_user, self.temp_staff.zone, self.env)
         _ = u_to.data
         if u_to.error:
-            logging.error(f"User to {to_user} does not exist.")
-            raise MergeProcessError(f"User to {to_user} does not exist.")
+            msg = f"User to {to_user} does not exist. ({type(u_to.error).__name__})"
+            logging.warning(msg)
+            raise UserNotFoundError(msg)
 
         u_to.data['user_block'] += [block for block in u_from.data['user_block'] if block['segment_type']=='Internal']
         u_to.update()
         if u_to.error:
-            logging.error(f"Failed to update user {to_user} after copying blocks: {u_to.error_msg}")
-            raise MergeProcessError(f"Failed to update user {to_user} after copying blocks: {u_to.error_msg}")
+            logging.error(f"Failed to update user {to_user} after copying blocks: {u_to.error_msg} ({type(u_to.error).__name__})")
+            raise MergeProcessError(f"Failed to update user {to_user} after copying blocks: {u_to.error_msg} ({type(u_to.error).__name__})")
 
     def log_merge_job_id(self):
         """Log the merge job ID after initiating a merge.
@@ -263,9 +266,8 @@ class AlmaMerger:
                  ))
             logging.info(f"Merge job initiated with ID: {jobid_cell.text}")
         except Exception as e:
-            logging.error(f"Failed to retrieve merge job ID: {e}")
-            raise MergeProcessError(f"Failed to retrieve merge job ID: {e}")
+            logging.error(f"Failed to retrieve merge job ID: {type(e).__name__}")
+            raise MergeProcessError(f"Failed to retrieve merge job ID: {type(e).__name__}")
 
 if __name__ == '__main__':
     pass
-

@@ -47,19 +47,7 @@
   "force_password_change": "false",
   "contact_info": {
     "address": [],
-    "email": [
-      {
-        "email_address": "automation@slsp.ch",
-        "email_type": [
-          {
-            "value": "work",
-            "desc": "Work"
-          }
-        ],
-        "preferred": true,
-        "segment_type": "Internal"
-      }
-    ],
+    "email": [],
     "phone": []
   },
   "user_identifier": [],

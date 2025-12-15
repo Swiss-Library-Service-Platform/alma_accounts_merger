@@ -4,10 +4,12 @@ from selenium.webdriver.support import expected_conditions as EC
 
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
+from selenium.common.exceptions import StaleElementReferenceException, NoSuchElementException, TimeoutException, ElementNotInteractableException, ElementClickInterceptedException
 
 import os
 import time
-from selenium.common.exceptions import StaleElementReferenceException, NoSuchElementException, TimeoutException, ElementNotInteractableException, ElementClickInterceptedException
+from typing import Optional
+
 from almapiwrapper.users import User
 
 from utils.staff import TempStaffUser
@@ -90,7 +92,8 @@ class AlmaMerger:
             MergeProcessError: If any step fails during the merge process.
         """
 
-        self.check_are_users_existing(from_user, to_user)
+        from_user_data = self.get_user_data(from_user)
+        to_user_data = self.get_user_data(to_user)
 
         try:
             add_job = self.wait.until(EC.element_to_be_clickable((
@@ -154,7 +157,7 @@ class AlmaMerger:
             logging.error(f"[merge_users] Error at merge button: {type(e).__name__}")
             raise MergeProcessError(f"merge button: {type(e).__name__}")
 
-        self.copy_internal_blocks(from_user, to_user)
+        self.copy_internal_blocks(from_user_data, to_user_data)
 
         try:
             start_btn = self.wait.until(EC.element_to_be_clickable((By.ID, 'PAGE_BUTTONS_cbuttonconfirmationconfirm')))
@@ -230,30 +233,26 @@ class AlmaMerger:
             logging.error(f"[search_user_in_iframe] Error at switch to default content: {type(e).__name__}")
             raise MergeProcessError(f"switch to default content: {type(e).__name__}")
 
-    def check_are_users_existing(self, from_user: str, to_user: str) -> None:
+    def get_user_data(self, primary_id: str) -> Optional[User]:
         """Check if both users exist in Alma.
 
         Args:
-            from_user (str): The primary ID of the user to merge from.
-            to_user (str): The primary ID of the user to merge to.
+            primary_id (str): The primary ID of the user to merge from.
         Raises:
             UserNotFoundError: If either user does not exist.
+        Returns:
+            User: The user object if found.
         """
-        u_from = User(from_user, self.temp_staff.zone, self.env)
-        _ = u_from.data
-        if u_from.error:
-            msg = f"User from {from_user} does not exist. ({type(u_from.error).__name__})"
+        u = User(primary_id, self.temp_staff.zone, self.env)
+        _ = u.data
+        if u.error:
+            msg = f"User {primary_id} does not exist. ({type(u.error).__name__})"
             logging.warning(msg)
             raise UserNotFoundError(msg)
 
-        u_to = User(to_user, self.temp_staff.zone, self.env)
-        _ = u_to.data
-        if u_to.error:
-            msg = f"User to {to_user} does not exist. ({type(u_to.error).__name__})"
-            logging.warning(msg)
-            raise UserNotFoundError(msg)
+        return u
 
-    def copy_internal_blocks(self, from_user: str, to_user: str) -> None:
+    def copy_internal_blocks(self, u_from: User, u_to: User) -> None:
         """Copy internal blocks from one user to another.
 
         Args:
@@ -263,19 +262,6 @@ class AlmaMerger:
         Raises:
             MergeProcessError: If any step fails during the block copying process.
         """
-        u_from = User(from_user, self.temp_staff.zone, self.env)
-        _ = u_from.data
-        if u_from.error:
-            msg = f"User from {from_user} does not exist. ({type(u_from.error).__name__})"
-            logging.warning(msg)
-            raise UserNotFoundError(msg)
-
-        u_to = User(to_user, self.temp_staff.zone, self.env)
-        _ = u_to.data
-        if u_to.error:
-            msg = f"User to {to_user} does not exist. ({type(u_to.error).__name__})"
-            logging.warning(msg)
-            raise UserNotFoundError(msg)
 
         internal_blocks = [block for block in u_from.data['user_block'] if block['segment_type']=='Internal']
 

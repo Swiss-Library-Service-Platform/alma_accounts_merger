@@ -271,8 +271,8 @@ class AlmaMerger:
             u_to.data['user_block'] += [block for block in u_from.data['user_block'] if block['segment_type']=='Internal']
             u_to.update()
             if u_to.error:
-                logging.error(f"Failed to update user {to_user} after copying blocks: {u_to.error_msg} ({type(u_to.error).__name__})")
-                raise MergeProcessError(f"Failed to update user {to_user} after copying blocks: {u_to.error_msg} ({type(u_to.error).__name__})")
+                logging.error(f"Failed to update user {u_to.primary_id} after copying blocks: {u_to.error_msg} ({type(u_to.error).__name__})")
+                raise MergeProcessError(f"Failed to update user {u_to.primary_id} after copying blocks: {u_to.error_msg} ({type(u_to.error).__name__})")
 
     def log_merge_job_id(self):
         """Log the merge job ID after initiating a merge.

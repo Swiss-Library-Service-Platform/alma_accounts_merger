@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 from utils.mergeprocess import AlmaMerger, MergeProcessError, UserNotFoundError
 from almapiwrapper.record import JsonData
+from importlib.resources import files
 from utils.staff import TempStaffUser
 import pandas as pd
 import sys

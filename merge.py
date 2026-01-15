@@ -1,5 +1,6 @@
 from dotenv import load_dotenv
 from utils.mergeprocess import AlmaMerger, MergeProcessError, UserNotFoundError
+from almapiwrapper.record import JsonData
 from utils.staff import TempStaffUser
 import pandas as pd
 import sys
@@ -33,9 +34,13 @@ def workflow(file_path: str):
     logger.addHandler(file_handler)
     logger.addHandler(stream_handler)
 
+    iz_info = JsonData(filepath=files('utils').joinpath('iz_info.json')).content
+
     df = pd.read_csv(file_path, dtype=str)
     if 'Merge_status' not in df.columns:
         df['Merge_status'] = 'NOT PROCESSED'
+
+    df['zone'].apply(lambda z: z if z in iz_info['iz_codes'] else iz_info['iz_codes_reverted'].get(z, z))
     accounts = {zone: data for zone, data in df.groupby('zone')}
     logging.info(f'Starting user merge process: {len(df)} accounts to process.')
 

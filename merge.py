@@ -41,7 +41,7 @@ def workflow(file_path: str):
     if 'Merge_status' not in df.columns:
         df['Merge_status'] = 'NOT PROCESSED'
 
-    df['zone'].apply(lambda z: z if z in iz_info['iz_codes'] else iz_info['iz_codes_reverted'].get(z, z))
+    df['zone'] = df['zone'].apply(lambda z: z if z in iz_info['iz_codes'] else iz_info['iz_codes_reverted'].get(z, z))
     accounts = {zone: data for zone, data in df.groupby('zone')}
     logging.info(f'Starting user merge process: {len(df)} accounts to process.')
 

@@ -38,8 +38,8 @@ def workflow(file_path: str):
     iz_info = JsonData(filepath=files('utils').joinpath('iz_info.json')).content
 
     df = pd.read_csv(file_path, dtype=str)
-    if 'Merge_status' not in df.columns:
-        df['Merge_status'] = 'NOT PROCESSED'
+    if 'Status' not in df.columns:
+        df['Status'] = 'NOT PROCESSED'
 
     df['zone'] = df['zone'].apply(lambda z: z if z in iz_info['iz_codes'] else iz_info['iz_codes_reverted'].get(z, z))
     accounts = {zone: data for zone, data in df.groupby('zone')}
@@ -72,7 +72,7 @@ def workflow(file_path: str):
             account_nb += 1
 
             # Skip already merged rows
-            if df.at[i, 'Merge_status'] == 'SUCCESS':
+            if df.at[i, 'Status'] == 'SUCCESS':
                 logging.info(f'Skipping already merged row {i} for {row["zone"]}: from {row["from_user"]} to {row["to_user"]}')
                 continue
 
@@ -80,16 +80,16 @@ def workflow(file_path: str):
 
             try:
                 merger.merge_users(from_user, to_user)
-                df.at[i, 'Merge_status'] = 'SUCCESS'
+                df.at[i, 'Status'] = 'SUCCESS'
                 df.to_csv(file_path, index=False)
             except UserNotFoundError:
                 logging.warning(f'Merge skipped due to user not found: merge {from_user} into {to_user}')
-                df.at[i, 'Merge_status'] = 'FAIL'
+                df.at[i, 'Status'] = 'FAILED'
                 df.to_csv(file_path, index=False)
                 continue
             except MergeProcessError:
                 logging.error(f'Failed to merge {from_user} into {to_user}')
-                df.at[i, 'Merge_status'] = 'FAIL'
+                df.at[i, 'Status'] = 'FAILED'
                 df.to_csv(file_path, index=False)
                 merger.driver.quit()
                 try:

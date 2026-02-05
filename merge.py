@@ -17,7 +17,8 @@ def workflow(file_path: str):
         file_path (str): Path to the Excel file containing merge instructions.
     """
     import os
-    load_dotenv()
+    env_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env')
+    load_dotenv(env_path)
 
     file_name = os.path.splitext(os.path.basename(file_path))[0]
 

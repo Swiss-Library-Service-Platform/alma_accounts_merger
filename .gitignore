@@ -37,3 +37,8 @@ build/
 # Ignore wheel files
 *.whl
 
+# Ignore Debian package files
+.deb
+
+# Ignore data directory
+/data
